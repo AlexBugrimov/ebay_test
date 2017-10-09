@@ -1,2 +1,11 @@
+# Intellij
 .idea/
-ebay_test.iml
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
