@@ -2,9 +2,9 @@ package ru.sberbank.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import ru.sberbank.infrastructure.WebDriverManager;
-public class RegEbayPage {
+
+public class RegEbayPage extends AbstractPage {
+
     @FindBy(xpath = "//div[@id='firstname_r']/input")
     private WebElement firstname;
 
@@ -20,20 +20,31 @@ public class RegEbayPage {
     @FindBy(id = "ppaFormSbtBtn")
     private WebElement registry;
 
-    public RegEbayPage() {
-        PageFactory.initElements(WebDriverManager.DRIVER, this);
-    }
+    @FindBy(id = "userid")
+    private WebElement userId;
 
-    public void fillRegForm() throws InterruptedException {
-        firstname.sendKeys("Иванов");
-        lastname.sendKeys("Иван");
-        email.sendKeys("112@111.ru");
-        password.sendKeys("qwerty456!");
+    @FindBy(id = "pass")
+    private WebElement userPassword;
+
+    @FindBy(id = "sgnBt")
+    private WebElement logInButton;
+
+    public void fillRegForm(String firstname, String lastname, String email, String password) throws InterruptedException {
+        this.firstname.sendKeys(firstname);
+        this.lastname.sendKeys(lastname);
+        this.email.sendKeys(email);
+        this.password.sendKeys(password);
         Thread.sleep(2000);
     }
 
     public void clickOnRegistryButton() throws InterruptedException {
         registry.click();
+    }
 
+    public void fillLogInForm(String email, String password) throws InterruptedException {
+        userId.sendKeys(email);
+        userPassword.sendKeys(password);
+        Thread.sleep(2000);
+        logInButton.click();
     }
 }
