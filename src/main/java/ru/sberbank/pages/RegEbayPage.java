@@ -3,7 +3,7 @@ package ru.sberbank.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class RegEbayPage extends AbstractPage {
+public class RegEbayPage extends Page {
 
     @FindBy(xpath = "//div[@id='firstname_r']/input")
     private WebElement firstname;
@@ -17,26 +17,19 @@ public class RegEbayPage extends AbstractPage {
     @FindBy(xpath = "//div[@id='PASSWORD_r']/input")
     private WebElement password;
 
-    @FindBy(id = "ppaFormSbtBtn")
-    private WebElement registry;
-
-    @FindBy(id = "userid")
-    private WebElement userId;
-
-    @FindBy(id = "pass")
-    private WebElement userPassword;
-
-    @FindBy(id = "sgnBt")
-    private WebElement logInButton;
-
-    public void fillRegForm(String firstname, String lastname, String email, String password) {
+    public void fillFirstname(String firstname) {
         this.firstname.sendKeys(firstname);
-        this.lastname.sendKeys(lastname);
-        this.email.sendKeys(email);
-        this.password.sendKeys(password);
     }
 
-    public void clickOnRegistryButton() {
-        explicitWaitForButton.apply(registry).click();
+    public void fillLastname(String lastname) {
+        this.lastname.sendKeys(lastname);
+    }
+
+    public void fillEmail(String email) {
+        this.email.sendKeys(email);
+    }
+
+    public void fillPassword(String password) {
+        this.password.sendKeys(password);
     }
 }

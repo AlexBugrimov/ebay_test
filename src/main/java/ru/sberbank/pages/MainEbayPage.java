@@ -8,9 +8,7 @@ import java.util.List;
 
 import static ru.sberbank.infrastructure.WebDriverManager.DRIVER;
 
-public class MainEbayPage extends AbstractPage {
-    private static final String REQUESTED_PRODUCT = "blackberry";
-
+public class MainEbayPage extends Page {
     @FindBy(xpath = "//a[.='зарегистрируйтесь']")
     private WebElement registerLink;
 
@@ -20,33 +18,16 @@ public class MainEbayPage extends AbstractPage {
     @FindBy(xpath = "//ul[@id='ListViewInner']/li")
     private List<WebElement> searchingResults;
 
-    @FindBy(xpath = "//input[@id='gh-btn']")
-    private WebElement searchButton;
-
     @FindBy(xpath = "//a[@id='gh-ug']")
     private WebElement userInformation;
-
-    @FindBy(xpath = "//a[.='Выход']")
-    private WebElement logOutButton;
-
-    @FindBy(xpath = "//a[.='Войдите']")
-    private WebElement logIn;
 
     public String getPageUrl() {
         return DRIVER.getCurrentUrl();
     }
 
-    public void clickOnRegisterLink() {
-        registerLink.click();
-    }
-
-    public void fillSearchInput() {
+    public void fillSearchInput(String requestedProduct) {
         DRIVER.switchTo().defaultContent();
-        explicitWaitForInput.apply(searchInput).sendKeys(REQUESTED_PRODUCT);
-    }
-
-    public void startSearching() {
-        explicitWaitForButton.apply(searchButton).click();
+        explicitWaitForInput.apply(searchInput).sendKeys(requestedProduct);
     }
 
     public List searchingResults() {
@@ -57,14 +38,9 @@ public class MainEbayPage extends AbstractPage {
         Actions actions = new Actions(DRIVER);
         explicitWaitForInput.apply(userInformation);
         actions.moveToElement(userInformation).build().perform();
-        explicitWaitForInput.apply(logOutButton).click();
     }
 
     public void registerLinkIsPresent() {
         registerLink.isDisplayed();
-    }
-
-    public void logIn() {
-        logIn.click();
     }
 }

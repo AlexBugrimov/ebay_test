@@ -13,7 +13,7 @@ import java.util.List;
 
 import static ru.sberbank.infrastructure.WebDriverManager.DRIVER;
 
-public class MailPage extends AbstractPage {
+public class MailPage extends Page {
 
     @FindBy(xpath = "//input[@id='mail']")
     private WebElement mailForm;
