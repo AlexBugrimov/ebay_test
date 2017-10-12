@@ -29,22 +29,14 @@ public class RegEbayPage extends AbstractPage {
     @FindBy(id = "sgnBt")
     private WebElement logInButton;
 
-    public void fillRegForm(String firstname, String lastname, String email, String password) throws InterruptedException {
+    public void fillRegForm(String firstname, String lastname, String email, String password) {
         this.firstname.sendKeys(firstname);
         this.lastname.sendKeys(lastname);
         this.email.sendKeys(email);
         this.password.sendKeys(password);
-        Thread.sleep(2000);
     }
 
-    public void clickOnRegistryButton() throws InterruptedException {
-        registry.click();
-    }
-
-    public void fillLogInForm(String email, String password) throws InterruptedException {
-        userId.sendKeys(email);
-        userPassword.sendKeys(password);
-        Thread.sleep(2000);
-        logInButton.click();
+    public void clickOnRegistryButton() {
+        explicitWaitForButton.apply(registry).click();
     }
 }

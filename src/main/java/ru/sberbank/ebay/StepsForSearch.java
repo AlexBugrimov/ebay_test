@@ -17,8 +17,8 @@ import static ru.sberbank.infrastructure.WebDriverManager.PROPERTIES;
 public class StepsForSearch {
 
     private static final int NUMBER_OF_PRODUCTS_ON_THE_PAGE = 50;
-    private static final String FIRSTNAME = "Иванов";
-    private static final String LASTNAME = "Иван";
+    private static final String FIRST_NAME = "Иванов";
+    private static final String LAST_NAME = "Иван";
     private static final String PASSWORD = "qwerty456!";
     private String email;
 
@@ -39,7 +39,9 @@ public class StepsForSearch {
     @Дано("^открыта главная страница ebay$")
     public void openMainPage() {
         DRIVER.navigate().to(PROPERTIES.getProperty("ebay.url"));
-        Assert.assertEquals(WebDriverManager.PROPERTIES.getProperty("ebay.url"), (mainEbayPage.getPageUrl()));
+        Assert.assertEquals("Не удалось открыть страницу ebay",
+                            mainEbayPage.getPageUrl(),
+                            WebDriverManager.PROPERTIES.getProperty("ebay.url"));
     }
 
     @Когда("^нажимаем на ссылку \"зарегистрируйтесь\"$")
@@ -49,22 +51,23 @@ public class StepsForSearch {
 
     @Тогда("^переходим на страницу регистрации$")
     public void openRegPage() {
-        Assert.assertTrue(mainEbayPage.getPageUrl().startsWith("https://reg.ebay.com/"));
+        Assert.assertTrue("Не удалось осуществить переход на страницу регистрации",
+                            mainEbayPage.getPageUrl().startsWith("https://reg.ebay.com/"));
     }
 
     @Когда("^заполним все поля формы$")
-    public void fillRegForm() throws InterruptedException {
-        regEbayPage.fillRegForm(FIRSTNAME, LASTNAME, email, PASSWORD);
+    public void fillRegForm() {
+        regEbayPage.fillRegForm(FIRST_NAME, LAST_NAME, email, PASSWORD);
     }
 
     @Тогда("^нажимаем на кнопку \"Зарегистрироваться\"$")
-    public void clickOnRegistryButton() throws InterruptedException {
+    public void clickOnRegistryButton() {
         regEbayPage.clickOnRegistryButton();
     }
 
     @Когда("^заполняем искомый товар$")
     public void fillSearchInput() {
-        DRIVER.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+        DRIVER.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
         mainEbayPage.fillSearchInput();
     }
 
@@ -80,7 +83,9 @@ public class StepsForSearch {
 
     @Тогда("^кличество отображаемых товаров соответствует требуемому$")
     public void checkSize() {
-        Assert.assertEquals(mainEbayPage.searchingResults().size(), NUMBER_OF_PRODUCTS_ON_THE_PAGE);
+        Assert.assertEquals("Количество продуктов не соответствует актуальному",
+                            NUMBER_OF_PRODUCTS_ON_THE_PAGE,
+                            mainEbayPage.searchingResults().size());
     }
 
     @Когда("^выходим из под своей учетной записи$")
@@ -93,7 +98,7 @@ public class StepsForSearch {
         mainEbayPage.registerLinkIsPresent();
     }
 
-    @Когда(value = "^в журнале присутствует новое сообщение$", timeout = 5000)
+    @Когда(value = "^в журнале присутствует новое сообщение$", timeout = 10000)
     public void newMessage() throws InterruptedException {
         while (!mailPage.isNewMessagePresented()) {
             mailPage.refreshButton();
@@ -110,11 +115,5 @@ public class StepsForSearch {
     public void clickOnTheMessageLink() throws InterruptedException {
         mailPage.clickOnTheMessageLink();
         DRIVER.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
-    }
-
-    @Тогда("^входим без регистрации$")
-    public void logIn() throws InterruptedException {
-        mainEbayPage.logIn();
-        regEbayPage.fillLogInForm(email, PASSWORD);
     }
 }

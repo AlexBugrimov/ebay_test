@@ -8,6 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ru.sberbank.infrastructure.WebDriverManager.DRIVER;
 
 public class MailPage extends AbstractPage {
@@ -48,5 +51,7 @@ public class MailPage extends AbstractPage {
         ((JavascriptExecutor) DRIVER).executeScript("arguments[0].scrollIntoView(true);", element);
         Thread.sleep(500);
         element.click();
+        List<String> tabs = new ArrayList<>(DRIVER.getWindowHandles());
+        DRIVER.switchTo().window(tabs.get(1));
     }
 }

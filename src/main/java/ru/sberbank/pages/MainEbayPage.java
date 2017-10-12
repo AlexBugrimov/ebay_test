@@ -1,11 +1,8 @@
 package ru.sberbank.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -19,6 +16,9 @@ public class MainEbayPage extends AbstractPage {
 
     @FindBy(xpath = "//input[@placeholder='Найдите любые товары']")
     private WebElement searchInput;
+
+    @FindBy(xpath = "//ul[@id='ListViewInner']/li")
+    private List<WebElement> searchingResults;
 
     @FindBy(xpath = "//input[@id='gh-btn']")
     private WebElement searchButton;
@@ -41,23 +41,23 @@ public class MainEbayPage extends AbstractPage {
     }
 
     public void fillSearchInput() {
-        searchInput.sendKeys(REQUESTED_PRODUCT);
+        DRIVER.switchTo().defaultContent();
+        explicitWaitForInput.apply(searchInput).sendKeys(REQUESTED_PRODUCT);
     }
 
     public void startSearching() {
-        searchButton.click();
+        explicitWaitForButton.apply(searchButton).click();
     }
 
     public List searchingResults() {
-        List<WebElement> searchResults = DRIVER.findElements(By.xpath("//ul[@id='ListViewInner']/li"));
-        return searchResults;
+        return explicitWaitForList.apply(searchingResults);
     }
 
     public void logOut() {
         Actions actions = new Actions(DRIVER);
+        explicitWaitForInput.apply(userInformation);
         actions.moveToElement(userInformation).build().perform();
-        WebElement element = new WebDriverWait(DRIVER, 5).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[.='Выход']")));
-        logOutButton.click();
+        explicitWaitForInput.apply(logOutButton).click();
     }
 
     public void registerLinkIsPresent() {
