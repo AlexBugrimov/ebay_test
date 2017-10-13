@@ -12,10 +12,6 @@ public class WebDriverManager {
     public static final Properties PROPERTIES = new Properties();
     public static final WebDriver DRIVER;
 
-    public static void timeout() {
-        DRIVER.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-    }
-
     static {
         try {
             System.setProperty("webdriver.chrome.driver", ".\\drivers\\chromedriver.exe");
@@ -23,7 +19,7 @@ public class WebDriverManager {
 
             PROPERTIES.load(WebDriverManager.class.getResourceAsStream("/config.properties"));
             DRIVER = Browser.valueOf(PROPERTIES.getProperty("browser").toUpperCase()).createDriver();
-            timeout();
+            DRIVER.manage().timeouts().pageLoadTimeout(Integer.valueOf(PROPERTIES.getProperty("timeout")), TimeUnit.SECONDS);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
