@@ -23,6 +23,7 @@ public class WebDriverManager {
 
             PROPERTIES.load(WebDriverManager.class.getResourceAsStream("/config.properties"));
             DRIVER = Browser.valueOf(PROPERTIES.getProperty("browser").toUpperCase()).createDriver();
+            timeout();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

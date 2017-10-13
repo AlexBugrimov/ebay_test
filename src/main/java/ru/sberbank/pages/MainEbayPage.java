@@ -18,11 +18,16 @@ public class MainEbayPage extends Page {
     @FindBy(xpath = "//ul[@id='ListViewInner']/li")
     private List<WebElement> searchingResults;
 
-    @FindBy(xpath = "//a[@id='gh-ug']")
+    @FindBy(xpath = "//button[@id='gh-ug']")
     private WebElement userInformation;
 
     public String getPageUrl() {
         return DRIVER.getCurrentUrl();
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return searchInput.isDisplayed();
     }
 
     public void fillSearchInput(String requestedProduct) {
@@ -34,10 +39,8 @@ public class MainEbayPage extends Page {
         return explicitWaitForList.apply(searchingResults);
     }
 
-    public void logOut() {
-        Actions actions = new Actions(DRIVER);
-        explicitWaitForInput.apply(userInformation);
-        actions.moveToElement(userInformation).build().perform();
+    public void hover() {
+        new Actions(DRIVER).moveToElement(explicitWaitForInput.apply(userInformation)).build().perform();
     }
 
     public void registerLinkIsPresent() {

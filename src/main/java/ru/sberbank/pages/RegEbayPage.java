@@ -17,6 +17,11 @@ public class RegEbayPage extends Page {
     @FindBy(xpath = "//div[@id='PASSWORD_r']/input")
     private WebElement password;
 
+    @Override
+    public boolean isLoaded() {
+        return lastname.isDisplayed();
+    }
+
     public void fillFirstname(String firstname) {
         this.firstname.sendKeys(firstname);
     }

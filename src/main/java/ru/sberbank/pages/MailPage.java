@@ -26,6 +26,11 @@ public class MailPage extends Page {
 
     private By linkInTheMessage = By.xpath("//a[@title='Перейти к покупкам']");
 
+    @Override
+    public boolean isLoaded() {
+        return refreshButton.isDisplayed();
+    }
+
     public String getEmail() {
         return mailForm.getAttribute("value");
     }

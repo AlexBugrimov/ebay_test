@@ -5,63 +5,42 @@ import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Когда;
 import cucumber.api.java.ru.Тогда;
 import org.junit.Assert;
-import ru.sberbank.infrastructure.WebDriverManager;
-import ru.sberbank.pages.MailPage;
 import ru.sberbank.pages.MainEbayPage;
 import ru.sberbank.pages.RegEbayPage;
 
 import static ru.sberbank.infrastructure.WebDriverManager.DRIVER;
 import static ru.sberbank.infrastructure.WebDriverManager.PROPERTIES;
 
-public class StepsForSearch {
-    private String email;
-
+public class EbaySteps {
     private final MainEbayPage mainEbayPage = new MainEbayPage();
     private final RegEbayPage regEbayPage = new RegEbayPage();
-    private final MailPage mailPage = new MailPage();
-
-    @Дано("^открыта страница почтового сервиса$")
-    public void openMailPage() {
-        DRIVER.navigate().to(PROPERTIES.getProperty("mail.url"));
-    }
-
-    @Дано("^получен временный почтовый адрес, сгенерированный специально для этого теста$")
-    public void getEmail() {
-        email = mailPage.getEmail();
-    }
 
     @Дано("^открыта главная страница ebay$")
     public void openMainPage() {
         DRIVER.navigate().to(PROPERTIES.getProperty("ebay.url"));
-        Assert.assertEquals("Не удалось открыть страницу ebay",
-                            mainEbayPage.getPageUrl(),
-                            WebDriverManager.PROPERTIES.getProperty("ebay.url"));
-    }
-
-    @Когда("^нажимаем на ссылку \"([^\"]*)\"$")
-    public void clickOnRegisterLink(String link) {
-        mainEbayPage.clickOnLink(link);
+        Assert.assertTrue("Не удалось открыть страницу ebay",
+                mainEbayPage.isLoaded());
     }
 
     @Тогда("^открыта страница регистрации$")
     public void openRegPage() {
         Assert.assertTrue("Не удалось осуществить переход на страницу регистрации",
-                            mainEbayPage.getPageUrl().startsWith("https://reg.ebay.com/"));
+                mainEbayPage.getPageUrl().startsWith("https://reg.ebay.com/"));
     }
 
-    @Когда("^заполняем поле Имя значеним \"([^\"]*)\"$")
+    @Когда("^заполняем поле Имя значением \"([^\"]*)\"$")
     public void fillFirstname(String firstname) {
         regEbayPage.fillFirstname(firstname);
     }
 
-    @И("^заполняем поле Фамилия значение \"([^\"]*)\"$")
+    @И("^заполняем поле Фамилия значением \"([^\"]*)\"$")
     public void fillLastname (String lastname) {
         regEbayPage.fillLastname(lastname);
     }
 
     @И("заполняем поле Адрес эл. почты полученным ранее значением$")
     public void fillEmail () {
-        regEbayPage.fillEmail(email);
+        regEbayPage.fillEmail(PROPERTIES.getProperty("email"));
     }
 
     @И("^заполняем поле Пароль значением \"([^\"]*)\"$")
@@ -74,28 +53,13 @@ public class StepsForSearch {
         regEbayPage.clickOnButton(nameButton);
     }
 
-    @Когда(value = "^в журнале присутствует новое сообщение$", timeout = 10000)
-    public void newMessage() throws InterruptedException {
-        while (!mailPage.isNewMessagePresented()) {
-            mailPage.refreshButton();
-            Thread.sleep(1000);
-        }
-    }
-
-    @Тогда("^открываем письмо$")
-    public void openNewMessage() {
-        mailPage.openNewMessage();
-    }
-
-    @Тогда("^переходим по ссылке$")
-    public void clickOnTheMessageLink() throws InterruptedException {
-        mailPage.clickOnTheMessageLink();
-        WebDriverManager.timeout();
+    @Когда("^нажимаем на ссылку \"([^\"]*)\"$")
+    public void clickOnRegisterLink(String link) {
+        mainEbayPage.clickOnLink(link);
     }
 
     @Когда("^в строку поиска вводим искомый товар \"([^\"]*)\"$")
     public void fillSearchInput(String requestedProduct) {
-        WebDriverManager.timeout();
         mainEbayPage.fillSearchInput(requestedProduct);
     }
 
@@ -107,13 +71,13 @@ public class StepsForSearch {
     @Тогда("^количество отображаемых товаров соответствует (\\d+)$")
     public void checkSize(int numberOfProducts) {
         Assert.assertEquals("Количество продуктов не соответствует актуальному",
-                            numberOfProducts,
-                            mainEbayPage.searchingResults().size());
+                numberOfProducts,
+                mainEbayPage.searchingResults().size());
     }
 
-    @Когда("^выходим из под своей учетной записи$")
-    public void logOut() {
-        mainEbayPage.logOut();
+    @Когда("^наводим курсор на поле учетной записи$")
+    public void hover() {
+        mainEbayPage.hover();
     }
 
     @Тогда("^можем зарегистрироваться заново$")
